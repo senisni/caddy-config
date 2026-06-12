@@ -5,37 +5,33 @@ Caddy конфигурация для `coopertino`.
 ## Структура
 
 ```
-Caddyfile                  # единственный конфиг со всеми хостами
-scripts/deploy.sh          # копирует Caddyfile на сервер и перезапускает Caddy
-.github/workflows/deploy.yml  # CI: push → deploy
-services/caddy/docker-compose.yml  # compose для Caddy на сервере
+sites/
+  dashboard.caddy     # infra.insines.ru + ip-ru.insines.ru
+  umami.caddy         # scitylana.insines.ru
+  massage.caddy       # массаж23.рф
+  obsidian.caddy      # obsidian.insines.ru
+  gramps.caddy        # gramps.insines.ru
+scripts/
+  build.sh            # собирает Caddyfile из sites/*.caddy
+  deploy.sh           # build → копирует на сервер → валидирует → перезапускает Caddy
+services/caddy/
+  docker-compose.yml  # compose для Caddy на сервере
 ```
-
-## Хосты
-
-| Хост | Сервис | Описание |
-|------|--------|----------|
-| `scitylana.insines.ru` | Umami | Аналитика |
-| `массаж23.рф` | massage-anapa:3001 | Массажный сайт |
-| `obsidian.insines.ru` | couchdb:5984 | Obsidian sync (IP allowlist) |
-| `gramps.insines.ru` | gramps-web:5000 | Genealogy (IP allowlist) |
-| `http://infra.insines.ru` | dashboard + API | Инфраструктурный дашборд |
-| `ip-ru.insines.ru` | ip-echo:3002 | Публичный IP endpoint |
 
 ## Как работает деплой
 
-1. Правишь `Caddyfile` в этом репозитории
+1. Правишь файл в `sites/`
 2. Пуш в `main`
-3. GitHub Actions подключается к серверу по SSH (порт 1991)
-4. `deploy.sh` копирует Caddyfile в `~/stacks/caddy/`
-5. Валидирует через `caddy validate`
-6. Перезапускает Caddy
+3. GitHub Actions: SSH → `git pull` → `deploy.sh`
+4. `build.sh` склеивает `sites/*.caddy` в один `Caddyfile`
+5. Копирует в `~/stacks/caddy/Caddyfile`
+6. Валидирует через `caddy validate`
+7. Перезапускает Caddy
 
-## Добавить новый хост
+## Добавить новый сайт
 
-1. Добавь блок в `Caddyfile`
+1. Создай `sites/new-site.caddy`
 2. Запушь в `main`
-3. Всё, хост работает
 
 ## Ручной деплой
 
@@ -48,7 +44,6 @@ git pull
 
 ## Сервер
 
-- Caddy живёт в Docker: `~/stacks/caddy/`
-- Compose: `services/caddy/docker-compose.yml`
+- Caddy: `~/stacks/caddy/`
 - Порты: `178.171.122.207:80/443` (публичные), `100.123.93.15:80` (Tailnet)
 - `extra_hosts: host.docker.internal:host-gateway` — нужен для proxy в host-сервисы

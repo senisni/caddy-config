@@ -1,0 +1,8 @@
+scitylana.insines.ru {
+    reverse_proxy umami-umami-1:3000
+
+    log {
+        output file /data/scitylana-access.log
+        format json
+    }
+}

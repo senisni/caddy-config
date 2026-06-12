@@ -1,0 +1,41 @@
+http://infra.insines.ru {
+  encode zstd gzip
+
+  handle /api/refresh {
+    reverse_proxy host.docker.internal:3001
+    header Cache-Control "no-store"
+  }
+
+  handle /api/health {
+    reverse_proxy host.docker.internal:3001
+    header Cache-Control "no-store"
+  }
+
+  handle {
+    root * /srv/insines-dashboard/dist
+    file_server
+
+    header {
+      X-Content-Type-Options nosniff
+      X-Frame-Options DENY
+      Referrer-Policy no-referrer
+      Cache-Control "public, max-age=300"
+    }
+
+    @assets {
+      path /assets/*
+      path /api/runtime.json
+    }
+    header @assets Cache-Control "public, max-age=60"
+  }
+
+  handle_errors {
+    root * /srv/insines-dashboard/dist
+    rewrite * /index.html
+    file_server
+  }
+}
+
+ip-ru.insines.ru {
+  reverse_proxy host.docker.internal:3002
+}
