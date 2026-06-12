@@ -1,0 +1,12 @@
+# Backup files
+*.bak
+
+# OS files
+.DS_Store
+
+# Editor files
+.vscode/
+.idea/
+
+# Node modules
+node_modules/

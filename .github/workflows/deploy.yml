@@ -1,0 +1,25 @@
+name: Deploy Caddy Config
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 1991
+          script: |
+            cd /home/insines/caddy-config
+            git pull origin main
+            chmod +x scripts/apply-managed.sh
+            ./scripts/apply-managed.sh

@@ -1,0 +1,17 @@
+obsidian.insines.ru {
+  @blocked {
+    not remote_ip 109.234.35.138 91.201.112.195 178.171.122.207 178.171.122.219 2a0d:8480:1:70f::/64
+  }
+  respond @blocked 403
+
+  encode zstd gzip
+
+  reverse_proxy insines-obsidian-couchdb:5984
+
+  header {
+    X-Content-Type-Options nosniff
+    X-Frame-Options DENY
+    Referrer-Policy no-referrer
+    Cache-Control "no-store"
+  }
+}

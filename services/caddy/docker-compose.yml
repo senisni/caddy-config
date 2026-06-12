@@ -1,0 +1,24 @@
+services:
+  caddy:
+    image: caddy:latest
+    restart: always
+    ports:
+      - "178.171.122.207:80:80"
+      - "178.171.122.207:443:443"
+      - "178.171.122.207:443:443/udp"
+      - "100.123.93.15:80:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./data:/data
+      - ./config:/config
+      - /srv/insines-dashboard/dist:/srv/insines-dashboard/dist:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - caddy-network
+      - umami_umami-network
+
+networks:
+  caddy-network:
+  umami_umami-network:
+    external: true
