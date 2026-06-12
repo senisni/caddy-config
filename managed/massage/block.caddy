@@ -1,7 +1,0 @@
-массаж23.рф {
-    reverse_proxy massage-anapa:3001
-
-    log {
-        output file /data/massage-access.log
-    }
-}
