@@ -12,6 +12,6 @@ cp "${REPO_DIR}/Caddyfile" "${CADDY_DIR}/Caddyfile"
 docker run --rm -v "${CADDY_DIR}/Caddyfile:/etc/caddy/Caddyfile:ro" caddy:latest caddy validate --config /etc/caddy/Caddyfile
 
 cd "$CADDY_DIR"
-docker compose restart caddy
+docker compose up -d
 
 echo "Done."
