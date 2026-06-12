@@ -23,8 +23,9 @@ if [ -f "$CADDY_FILE" ]; then
     python3 - "$CADDY_FILE" <<'PY'
 import re
 import sys
+from pathlib import Path
 
-path = sys.argv[1]
+path = Path(sys.argv[1])
 text = path.read_text()
 pattern = re.compile(r'# BEGIN \w+.*?# END \w+', re.S)
 text = pattern.sub("", text)
