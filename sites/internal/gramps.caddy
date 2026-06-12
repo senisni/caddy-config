@@ -1,0 +1,6 @@
+gramps.insines.ru {
+    import server-ips
+    respond @blocked 403
+
+    reverse_proxy gramps-web:5000
+}

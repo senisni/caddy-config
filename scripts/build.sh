@@ -8,10 +8,10 @@ OUTPUT="${REPO_DIR}/Caddyfile"
 
 > "$OUTPUT"
 
-for f in "$SITES_DIR"/*.caddy; do
+for f in "$SITES_DIR"/internal/*.caddy "$SITES_DIR"/external/*.caddy; do
     [ -f "$f" ] || continue
     cat "$f" >> "$OUTPUT"
     echo "" >> "$OUTPUT"
 done
 
-echo "Built Caddyfile from $(ls "$SITES_DIR"/*.caddy | wc -l) sites"
+echo "Built Caddyfile from $(find "$SITES_DIR" -name '*.caddy' | wc -l | tr -d ' ') sites"
